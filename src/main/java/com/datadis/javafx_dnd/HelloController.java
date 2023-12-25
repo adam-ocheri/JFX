@@ -6,6 +6,8 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Pane;
+
 
 
 public class HelloController {
@@ -18,8 +20,26 @@ public class HelloController {
     @FXML
     private Button destination;
 
+    @FXML
+    private Pane rootPane;
+
+    private class Delta {
+        double x, y;
+    }
+
     public void initialize() {
+
         welcomeText.setText("INIT");
+
+        source.setOnMousePressed(event -> {
+            source.relocate(event.getSceneX(), event.getSceneY());
+        });
+
+        source.setOnMouseDragged(event -> {
+            source.setLayoutX(event.getSceneX() - rootPane.getLayoutX());
+            source.setLayoutY(event.getSceneY() - rootPane.getLayoutY());
+        });
+
         source.setOnDragDetected(event -> {
             Dragboard db = source.startDragAndDrop(TransferMode.ANY);
             ClipboardContent content = new ClipboardContent();
